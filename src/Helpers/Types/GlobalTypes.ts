@@ -8,5 +8,6 @@ export type RoutesNavigation = {
 export type IdentityResponseLogin = {
   isSuccess: boolean;
   username: string;
+  email: string;
 }
 
