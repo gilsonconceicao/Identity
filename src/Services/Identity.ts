@@ -15,7 +15,6 @@ export type IdentityLoginype = {
 }
 
 export async function registerIdentityUser(payload: IdentityRegisterType) {
-  debugger; 
   return await axios.post(`${url}/User`, payload); 
 }
 

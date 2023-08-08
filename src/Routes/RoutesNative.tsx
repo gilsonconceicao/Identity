@@ -4,43 +4,47 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeContainer from '../Pages/Home/HomeContainer';
 import { RegisterContainer } from '../Pages/Register/RegisterContainer';
 import { LoginContainer } from '../Pages/Login/LoginContainer';
+import { useIdentity } from '../Contexts/IdentiryContext';
 
 const Stack = createNativeStackNavigator();
 
 const RoutesNative = () => {
+  const { isLogged } = useIdentity();
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="registerUser"
-          options={{
-            title: "Cadastro", 
-            headerShown: false
-          }}
-
-        >
-          {(props) =>
-            <RegisterContainer
-              navigation={props.navigation}
-              route={props.route} />
-          }
-        </Stack.Screen>
-        <Stack.Screen
-          name="loginUser"
-          options={{
-            title: "Entrar", 
-            headerShown: false
-          }}
-          component={LoginContainer}
-        />
-        <Stack.Screen
-          name="home"
-          options={{
-            title: "Home"
-          }}
-          component={HomeContainer}
-        />
-      </Stack.Navigator>
+      {!isLogged ?
+        <Stack.Navigator>
+          <Stack.Screen
+            name="registerUser"
+            options={{
+              title: "Cadastro",
+              headerShown: false
+            }}
+          >
+            {(props) =>
+              <RegisterContainer
+                navigation={props.navigation}
+                route={props.route} />
+            }
+          </Stack.Screen>
+          <Stack.Screen
+            name="loginUser"
+            options={{
+              title: "Entrar",
+              headerShown: false
+            }}
+            component={LoginContainer}
+          />
+        </Stack.Navigator> :
+        <Stack.Navigator>
+          <Stack.Screen
+            name="home"
+            options={{
+              title: "Home"
+            }}
+            component={HomeContainer}
+          />
+        </Stack.Navigator>}
     </NavigationContainer>
   )
 }
