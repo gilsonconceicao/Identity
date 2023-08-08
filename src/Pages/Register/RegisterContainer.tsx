@@ -8,6 +8,7 @@ import { IdentityRegisterType } from '../../Services/Identity';
 import { useRegisterUserMutation } from '../../Hooks/IdentityHook';
 import { ParamListBase, RouteProp } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
+import { Error } from '../../Components/Error/Error';
 
 type RegisterContainerProps = {
   route: RouteProp<ParamListBase, string>;
@@ -34,7 +35,7 @@ export const RegisterContainer = ({ navigation, route }: RegisterContainerProps)
   const onSubmit = (values: IdentityRegisterType) => {
     const { password, passwordConfirmation } = values;
     if (password !== passwordConfirmation) {
-      return alert("Senhas não são iguais. :(");
+      return alert("Senhas não são iguais.");
     }
     return mutate(values);
   };
@@ -83,6 +84,7 @@ export const RegisterContainer = ({ navigation, route }: RegisterContainerProps)
           required={true}
         />
       </View>
+      {status === 'error' && <Error errorMessage='Ocorreu um erro, verifique as informações ou tente novamente mais tarde.' />}
       <Button
         children="Já tenho conta"
         style={{marginTop: 15}}

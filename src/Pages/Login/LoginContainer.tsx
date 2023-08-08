@@ -2,14 +2,15 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { TextField } from '../../Components/TextField/TextField';
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { IdentityLoginype } from '../../Services/Identity';
 import { useLoginUserMutation } from '../../Hooks/IdentityHook';
 import { loginSchemaValidation, loginDefaultValue } from './LoginSchema';
 import { Button } from 'react-native-paper';
 import { ParamListBase, RouteProp } from '@react-navigation/native';
 import { IdentityResponseLogin } from '../../Helpers/Types/GlobalTypes';
-import { saveSsyncStoreData } from '../../Hooks/AsyncStorageIdentity';
+import { useIdentity } from '../../Contexts/IdentiryContext';
+import { Error } from '../../Components/Error/Error';
 
 type LoginContainerProps = {
   route: RouteProp<ParamListBase, string>;
@@ -17,24 +18,23 @@ type LoginContainerProps = {
 }
 
 export const LoginContainer = ({ navigation, route }: LoginContainerProps) => {
+
+  const { signIn, setIsLogged } = useIdentity();
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(loginSchemaValidation()),
     defaultValues: loginDefaultValue
   });
 
-  const onSuccess = (res: any) => {
-    const { isSuccess, username } = res.data as IdentityResponseLogin;
+  const onSuccess = (formValues: FieldValues) => {
+    const { isSuccess, username, email } = formValues.data as IdentityResponseLogin;
     if (isSuccess) {
-      // to-do: save response data in localstorage; 
-      saveSsyncStoreData("@identityUser", {
-        username,
-        isSuccess
-      });
+      signIn({ username, email });
+      setIsLogged(true);
       return navigation.navigate('home');
     }
   }
 
-  const onError = (error: any): void => { debugger }
+  const onError = (): void => {}
 
   const { mutate, status } = useLoginUserMutation(onSuccess, onError)
 
@@ -67,6 +67,9 @@ export const LoginContainer = ({ navigation, route }: LoginContainerProps) => {
           required={true}
         />
       </View>
+
+      {status === 'error' && <Error errorMessage='Ocorreu um erro, verifique as informações ou tente novamente mais tarde.' />}
+
       <Button
         children="Não tenho conta"
         style={{ marginTop: 15 }}
