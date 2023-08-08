@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeContainer from '../Pages/Home/HomeContainer';
 import { RegisterContainer } from '../Pages/Register/RegisterContainer';
 import { LoginContainer } from '../Pages/Login/LoginContainer';
-import { IconButton } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +32,13 @@ const RoutesNative = () => {
             headerShown: false
           }}
           component={LoginContainer}
+        />
+        <Stack.Screen
+          name="home"
+          options={{
+            title: "Home"
+          }}
+          component={HomeContainer}
         />
       </Stack.Navigator>
     </NavigationContainer>

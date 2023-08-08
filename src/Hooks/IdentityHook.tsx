@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { IdentityLoginype, IdentityRegisterType, loginIdentityUser, registerIdentityUser } from "../Services/Identity"
+import { IdentityResponseLogin } from "../Helpers/Types/GlobalTypes";
 
 export const useRegisterUserMutation = (
   onSuccess?: (data: any) => void,
@@ -16,7 +17,7 @@ export const useRegisterUserMutation = (
 }
 
 export const useLoginUserMutation = (
-  onSuccess?: () => void,
+  onSuccess?: (response: any) => void,
   onError?: (error: any) => void
 ) => {
   const { mutate, status } = useMutation({

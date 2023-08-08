@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text} from 'react-native'
+import { View, Text } from 'react-native'
 import { TextField } from '../../Components/TextField/TextField';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
@@ -8,6 +8,8 @@ import { useLoginUserMutation } from '../../Hooks/IdentityHook';
 import { loginSchemaValidation, loginDefaultValue } from './LoginSchema';
 import { Button } from 'react-native-paper';
 import { ParamListBase, RouteProp } from '@react-navigation/native';
+import { IdentityResponseLogin } from '../../Helpers/Types/GlobalTypes';
+import { saveSsyncStoreData } from '../../Hooks/AsyncStorageIdentity';
 
 type LoginContainerProps = {
   route: RouteProp<ParamListBase, string>;
@@ -20,9 +22,19 @@ export const LoginContainer = ({ navigation, route }: LoginContainerProps) => {
     defaultValues: loginDefaultValue
   });
 
-  const onSuccess = (): void => { debugger }
+  const onSuccess = (res: any) => {
+    const { isSuccess, username } = res.data as IdentityResponseLogin;
+    if (isSuccess) {
+      // to-do: save response data in localstorage; 
+      saveSsyncStoreData("@identityUser", {
+        username,
+        isSuccess
+      });
+      return navigation.navigate('home');
+    }
+  }
 
-  const onError = (error:any): void => { debugger }
+  const onError = (error: any): void => { debugger }
 
   const { mutate, status } = useLoginUserMutation(onSuccess, onError)
 
@@ -31,8 +43,8 @@ export const LoginContainer = ({ navigation, route }: LoginContainerProps) => {
   };
 
   return (
-    <View style={{  flex: 1, margin: 20, marginTop: 200}}>
-      <Text style={{fontSize: 25}}>
+    <View style={{ flex: 1, margin: 20, marginTop: 200 }}>
+      <Text style={{ fontSize: 25 }}>
         Entrar
       </Text>
       <View style={{ marginTop: 10 }}>
@@ -61,7 +73,7 @@ export const LoginContainer = ({ navigation, route }: LoginContainerProps) => {
         onPress={() => navigation.navigate('registerUser')}
       />
       <View style={{ marginTop: 20 }}>
-        <Button children='Entrar' mode='contained' onPress={handleSubmit(onSubmit)} />
+        <Button children='Entrar' disabled={status === 'loading'} mode='contained' onPress={handleSubmit(onSubmit)} />
       </View>
     </View>
   )
