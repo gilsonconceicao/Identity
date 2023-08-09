@@ -1,5 +1,5 @@
 import React from 'react'
-import { View,Text } from 'react-native'
+import { View, Text } from 'react-native'
 import { TextField } from '../../Components/TextField/TextField';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form';
@@ -21,16 +21,11 @@ export const RegisterContainer = ({ navigation, route }: RegisterContainerProps)
     defaultValues: registerDefaultValue,
   });
 
-  const onSuccess = (data: IdentityRegisterType): void => { 
-    // to-do: implement routine after create user
-   }
+  const onSuccess = (data: IdentityRegisterType): void => {
+    navigation.navigate('loginUser');
+  }
 
-  const onError = (error: any) => { 
-    // to-do: show error
-    console.log(error); 
-   }
-
-  const { mutate, status, isLoading} = useRegisterUserMutation(onSuccess, onError)
+  const { mutate, status, isLoading } = useRegisterUserMutation(onSuccess)
 
   const onSubmit = (values: IdentityRegisterType) => {
     const { password, passwordConfirmation } = values;
@@ -41,9 +36,9 @@ export const RegisterContainer = ({ navigation, route }: RegisterContainerProps)
   };
 
   return (
-    <View style={{ flex: 1, margin: 20, marginTop: 100}}>
-      <Text style={{fontSize: 25}}>
-        Cadastro
+    <View style={{ flex: 1, margin: 20, marginTop: 100 }}>
+      <Text style={{ fontSize: 25 }}>
+        Cadastro 
       </Text>
       <View style={{ marginTop: 10 }}>
         <TextField
@@ -87,7 +82,7 @@ export const RegisterContainer = ({ navigation, route }: RegisterContainerProps)
       {status === 'error' && <Error errorMessage='Ocorreu um erro, verifique as informações ou tente novamente mais tarde.' />}
       <Button
         children="Já tenho conta"
-        style={{marginTop: 15}}
+        style={{ marginTop: 15 }}
         onPress={() => navigation.navigate('loginUser')}
       />
       <View style={{ marginTop: 20 }}>
