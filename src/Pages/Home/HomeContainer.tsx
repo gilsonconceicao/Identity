@@ -5,22 +5,14 @@ import { Button } from 'react-native-paper'
 import { useIdentity } from '../../Contexts/IdentiryContext'
 
 const HomeContainer = () => {
-  const { setIsLogged } = useIdentity();
-
-  const handleSignOut = () => {
-    clearAsyncStorageData("@identityUser");
-    setIsLogged(false);
-  }
 
   return (
-    <View>
-      <Text>Hello world!</Text>
-      <Button
-        children="Clear data"
-        style={{width: 200}}
-        mode='contained'
-        onPress={handleSignOut}
-      />
+    <View style={{
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <Text style={{ fontSize: 30 }}>Bem vindo!</Text>
     </View>
   )
 }
