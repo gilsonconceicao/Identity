@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url = `http://192.168.100.123:8080`; 
+const url = `http://192.168.100.123:8080`;
 
 export type IdentityRegisterType = {
   username: string,
@@ -15,9 +15,9 @@ export type IdentityLoginype = {
 }
 
 export async function registerIdentityUser(payload: IdentityRegisterType) {
-  return await axios.post(`${url}/User`, payload); 
+  return await axios.post(`${url}/User`, payload);
 }
 
 export async function loginIdentityUser(payload: IdentityLoginype) {
-  return await axios.post(`${url}/User/SignIn`, payload); 
+  return await axios.post(`${url}/User/SignIn`, payload);
 }
