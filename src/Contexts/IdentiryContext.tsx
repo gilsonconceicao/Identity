@@ -11,6 +11,7 @@ interface IdentityUserType {
   currentUser: User;
   signIn: (user: User) => void;
   setIsLogged: (isLogged: boolean) => void;
+  setCurrentUser: (currentUser: User | null) => void;
 }
 
 const defaultValuesIdentityUser: IdentityUserType = {
@@ -20,6 +21,7 @@ const defaultValuesIdentityUser: IdentityUserType = {
     username: null
   },
   signIn: (user: User) => { },
+  setCurrentUser: (user: User | null) => { },
   setIsLogged: (isLogged: boolean) => { }
 }
 
@@ -40,6 +42,9 @@ export const IdentityUserProvider: FC<IProvider> = ({ children }) => {
           if (values !== null) {
             setIsLogged(true);
             setCurrentUser(values);
+          } else {
+            setIsLogged(false);
+            setCurrentUser(null);
           }
         })
     }
@@ -54,6 +59,7 @@ export const IdentityUserProvider: FC<IProvider> = ({ children }) => {
     <IdentityUserContext.Provider
       value={{
         isLogged,
+        setCurrentUser,
         currentUser: currentUser!,
         signIn: signIn,
         setIsLogged
